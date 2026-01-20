@@ -1,5 +1,5 @@
 {
-    "name": "laminas/laminas-captcha",
+    "name": "magento/magento-zf-captcha",
     "description": "Generate and validate CAPTCHAs using Figlets, images, ReCaptcha, and more",
     "license": "BSD-3-Clause",
     "keywords": [
@@ -39,6 +39,9 @@
         "phpunit/phpunit": "^9.5.26",
         "psalm/plugin-phpunit": "^0.19.0",
         "vimeo/psalm": "^6.13"
+    },
+    "replace": {
+      "laminas/laminas-captcha": "^2.19"
     },
     "suggest": {
         "laminas/laminas-i18n-resources": "Translations of captcha messages"
