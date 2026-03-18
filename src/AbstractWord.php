@@ -331,7 +331,7 @@ abstract class AbstractWord extends AbstractAdapter
         }
 
         if (strlen($word) > $wordLen) {
-            $word = substr($word, 0, $wordLen);
+            return substr($word, 0, $wordLen);
         }
 
         return $word;
@@ -395,7 +395,7 @@ abstract class AbstractWord extends AbstractAdapter
             $this->error(self::MISSING_VALUE);
             return false;
         }
-        $input = strtolower($value['input']);
+        $input = strtolower((string) $value['input']);
         $this->setValue($input);
 
         if (! isset($value['id']) || ! preg_match('/^[a-f0-9][a-f0-9_\\\\]+$/i', (string) $value['id'])) {

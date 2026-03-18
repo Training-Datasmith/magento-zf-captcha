@@ -28,9 +28,8 @@ class Dumb extends AbstractWord
      * Set the label for the CAPTCHA
      *
      * @param string $label
-     * @return void
      */
-    public function setLabel($label)
+    public function setLabel($label): void
     {
         $this->label = $label;
     }
@@ -47,11 +46,9 @@ class Dumb extends AbstractWord
 
     /**
      * Retrieve optional view helper name to use when rendering this captcha
-     *
-     * @return string
      */
     #[Override]
-    public function getHelperName()
+    public function getHelperName(): string
     {
         return 'captcha/dumb';
     }

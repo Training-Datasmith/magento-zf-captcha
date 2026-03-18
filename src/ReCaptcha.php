@@ -168,8 +168,6 @@ class ReCaptcha extends AbstractAdapter
         $this->serviceParams  = $this->getService()->getParams();
         $this->serviceOptions = $this->getService()->getOptions();
 
-        parent::__construct($options);
-
         if (! empty($options)) {
             if (array_key_exists('secret_key', $options) && is_string($options['secret_key'])) {
                 $this->getService()->setSecretKey($options['secret_key']);
@@ -218,11 +216,10 @@ class ReCaptcha extends AbstractAdapter
      * goes for any service options (distinct from service params)
      *
      * @param  string $key
-     * @param  mixed $value
      * @return $this Provides a fluent interface
      */
     #[Override]
-    public function setOption($key, $value)
+    public function setOption($key, mixed $value)
     {
         $service = $this->getService();
         if (array_key_exists($key, $this->serviceParams)) {
@@ -240,11 +237,9 @@ class ReCaptcha extends AbstractAdapter
      * Generate captcha
      *
      * @see AbstractAdapter::generate()
-     *
-     * @return string
      */
     #[Override]
-    public function generate()
+    public function generate(): string
     {
         return "";
     }
@@ -287,11 +282,9 @@ class ReCaptcha extends AbstractAdapter
 
     /**
      * Get helper name used to render captcha
-     *
-     * @return string
      */
     #[Override]
-    public function getHelperName()
+    public function getHelperName(): string
     {
         return "captcha/recaptcha";
     }

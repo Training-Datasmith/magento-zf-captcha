@@ -21,7 +21,7 @@ class Figlet extends AbstractWord
      *
      * @var FigletManager
      */
-    protected $figlet;
+    protected \Laminas\Text\Figlet\Figlet $figlet;
 
     /**
      * Constructor
@@ -30,7 +30,6 @@ class Figlet extends AbstractWord
      */
     public function __construct($options = null)
     {
-        parent::__construct($options);
         $this->figlet = new FigletManager($options);
     }
 
@@ -58,11 +57,9 @@ class Figlet extends AbstractWord
 
     /**
      * Get helper name used to render captcha
-     *
-     * @return string
      */
     #[Override]
-    public function getHelperName()
+    public function getHelperName(): string
     {
         return 'captcha/figlet';
     }

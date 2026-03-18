@@ -137,24 +137,19 @@ class Image extends AbstractWord
     /**
      * Constructor
      *
-     * @param iterable<string, mixed>|null $options
      * @throws Exception\ExtensionNotLoadedException
      */
-    public function __construct($options = null)
+    public function __construct()
     {
         if (! extension_loaded("gd")) {
             throw new Exception\ExtensionNotLoadedException("Image CAPTCHA requires GD extension");
         }
-
         if (! function_exists("imagepng")) {
             throw new Exception\ExtensionNotLoadedException("Image CAPTCHA requires PNG support");
         }
-
         if (! function_exists("imageftbbox")) {
             throw new Exception\ExtensionNotLoadedException("Image CAPTCHA requires FT fonts support");
         }
-
-        parent::__construct($options);
     }
 
     /**
@@ -570,23 +565,32 @@ class Image extends AbstractWord
                 $sy = $y + (sin($x * $freq2 + $ph2) + sin($y * $freq4 + $ph4)) * $szy;
                 $sx = (int) $sx;
                 $sy = (int) $sy;
-
-                if ($sx < 0 || $sy < 0 || $sx >= $w - 1 || $sy >= $h - 1) {
+                if ($sx < 0) {
                     continue;
-                } else {
-                    $color   = (imagecolorat($img, $sx, $sy) >> 16) & 0xFF;
-                    $colorX  = (imagecolorat($img, $sx + 1, $sy) >> 16) & 0xFF;
-                    $colorY  = (imagecolorat($img, $sx, $sy + 1) >> 16) & 0xFF;
-                    $colorXy = (imagecolorat($img, $sx + 1, $sy + 1) >> 16) & 0xFF;
                 }
-
+                if ($sy < 0) {
+                    continue;
+                }
+                if ($sx >= $w - 1) {
+                    continue;
+                }
+                if ($sy >= $h - 1) {
+                    continue;
+                }
+                $color   = (imagecolorat($img, $sx, $sy) >> 16) & 0xFF;
+                $colorX  = (imagecolorat($img, $sx + 1, $sy) >> 16) & 0xFF;
+                $colorY  = (imagecolorat($img, $sx, $sy + 1) >> 16) & 0xFF;
+                $colorXy = (imagecolorat($img, $sx + 1, $sy + 1) >> 16) & 0xFF;
                 if ($color === 255 && $colorX === 255 && $colorY === 255 && $colorXy === 255) {
                     // ignore background
                     continue;
-                } elseif ($color === 0 && $colorX === 0 && $colorY === 0 && $colorXy === 0) {
+                }
+
+                if ($color === 0 && $colorX === 0 && $colorY === 0 && $colorXy === 0) {
                     // transfer inside of the image as-is
                     $newcolor = 0;
-                } else {
+                }
+                else {
                     // do antialiasing for border items
                     $fracX  = $sx - floor($sx);
                     $fracY  = $sy - floor($sy);
@@ -636,26 +640,33 @@ class Image extends AbstractWord
 
         $suffixLength = strlen($this->suffix);
         foreach (new DirectoryIterator($imgdir) as $file) {
-            if (! $file->isDot() && ! $file->isDir()) {
-                if (file_exists($file->getPathname()) && $file->getMTime() < $expire) {
-                    // only deletes files ending with $this->suffix
-                    if (substr($file->getFilename(), -$suffixLength) === $this->suffix) {
-                        ErrorHandler::start();
-                        unlink($file->getPathname());
-                        ErrorHandler::stop();
-                    }
-                }
+            if ($file->isDot()) {
+                continue;
             }
+            if ($file->isDir()) {
+                continue;
+            }
+            if (!file_exists($file->getPathname())) {
+                continue;
+            }
+            if (!($file->getMTime() < $expire)) {
+                continue;
+            }
+            // only deletes files ending with $this->suffix
+            if (substr($file->getFilename(), -$suffixLength) !== $this->suffix) {
+                continue;
+            }
+            ErrorHandler::start();
+            unlink($file->getPathname());
+            ErrorHandler::stop();
         }
     }
 
     /**
      * Get helper name used to render captcha
-     *
-     * @return string
      */
     #[Override]
-    public function getHelperName()
+    public function getHelperName(): string
     {
         return 'captcha/image';
     }
