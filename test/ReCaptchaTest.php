@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace LaminasTest\Captcha;
 
+use function getenv;
+
 use Laminas\Captcha\ReCaptcha;
-use Laminas\Http\Client as HttpClient;
 use Laminas\Http\Client\Adapter\Socket;
+use Laminas\Http\Client as HttpClient;
 use Laminas\ReCaptcha\ReCaptcha as ReCaptchaService;
 use Override;
-use PHPUnit\Framework\TestCase;
 
-use function getenv;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @group      Laminas_Captcha

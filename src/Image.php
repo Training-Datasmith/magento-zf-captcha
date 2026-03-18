@@ -1,13 +1,15 @@
-<?php // phpcs:disable WebimpressCodingStandard.NamingConventions.ValidVariableName.final NotCamelCaps
+<?php
+
+declare(strict_types=1);
+// phpcs:disable WebimpressCodingStandard.NamingConventions.ValidVariableName.final NotCamelCaps
 
 namespace Laminas\Captcha;
 
 use DirectoryIterator;
-use Laminas\Stdlib\ErrorHandler;
-use Override;
 
 use function extension_loaded;
 use function file_exists;
+
 use function floor;
 use function function_exists;
 use function imagecolorallocate;
@@ -23,7 +25,13 @@ use function imagepng;
 use function imagesetpixel;
 use function imagesx;
 use function imagesy;
+
+use Laminas\Stdlib\ErrorHandler;
+
 use function mt_rand;
+
+use Override;
+
 use function rtrim;
 use function sin;
 use function strlen;
@@ -45,28 +53,28 @@ class Image extends AbstractWord
      *
      * @var string
      */
-    protected $imgDir = "public/images/captcha/";
+    protected $imgDir = 'public/images/captcha/';
 
     /**
      * URL for accessing images
      *
      * @var string
      */
-    protected $imgUrl = "/images/captcha/";
+    protected $imgUrl = '/images/captcha/';
 
     /**
      * Image's alt tag content
      *
      * @var string
      */
-    protected $imgAlt = "";
+    protected $imgAlt = '';
 
     /**
      * Image suffix (including dot)
      *
      * @var string
      */
-    protected $suffix = ".png";
+    protected $suffix = '.png';
 
     /**
      * Image width
@@ -141,14 +149,14 @@ class Image extends AbstractWord
      */
     public function __construct()
     {
-        if (! extension_loaded("gd")) {
-            throw new Exception\ExtensionNotLoadedException("Image CAPTCHA requires GD extension");
+        if (! extension_loaded('gd')) {
+            throw new Exception\ExtensionNotLoadedException('Image CAPTCHA requires GD extension');
         }
-        if (! function_exists("imagepng")) {
-            throw new Exception\ExtensionNotLoadedException("Image CAPTCHA requires PNG support");
+        if (! function_exists('imagepng')) {
+            throw new Exception\ExtensionNotLoadedException('Image CAPTCHA requires PNG support');
         }
-        if (! function_exists("imageftbbox")) {
-            throw new Exception\ExtensionNotLoadedException("Image CAPTCHA requires FT fonts support");
+        if (! function_exists('imageftbbox')) {
+            throw new Exception\ExtensionNotLoadedException('Image CAPTCHA requires FT fonts support');
         }
     }
 
@@ -372,7 +380,7 @@ class Image extends AbstractWord
      */
     public function setImgDir($imgDir)
     {
-        $this->imgDir = rtrim($imgDir, "/\\") . '/';
+        $this->imgDir = rtrim($imgDir, '/\\') . '/';
         return $this;
     }
 
@@ -384,7 +392,7 @@ class Image extends AbstractWord
      */
     public function setImgUrl($imgUrl)
     {
-        $this->imgUrl = rtrim($imgUrl, "/\\") . '/';
+        $this->imgUrl = rtrim($imgUrl, '/\\') . '/';
         return $this;
     }
 
@@ -589,8 +597,7 @@ class Image extends AbstractWord
                 if ($color === 0 && $colorX === 0 && $colorY === 0 && $colorXy === 0) {
                     // transfer inside of the image as-is
                     $newcolor = 0;
-                }
-                else {
+                } else {
                     // do antialiasing for border items
                     $fracX  = $sx - floor($sx);
                     $fracY  = $sy - floor($sy);

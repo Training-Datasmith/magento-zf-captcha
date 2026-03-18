@@ -1,15 +1,21 @@
-<?php // phpcs:disable Generic.NamingConventions.ConstructorName.OldStyle,WebimpressCodingStandard.NamingConventions.AbstractClass.Prefix
+<?php
+
+declare(strict_types=1);
+// phpcs:disable Generic.NamingConventions.ConstructorName.OldStyle,WebimpressCodingStandard.NamingConventions.AbstractClass.Prefix
 
 namespace Laminas\Captcha;
 
-use Laminas\Stdlib\ArrayUtils;
-use Traversable;
-
 use function class_exists;
 use function get_debug_type;
+
 use function is_array;
+
+use Laminas\Stdlib\ArrayUtils;
+
 use function sprintf;
 use function strtolower;
+
+use Traversable;
 
 abstract class Factory
 {

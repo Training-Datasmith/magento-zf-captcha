@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace Laminas\Captcha;
 
-use Laminas\ReCaptcha\ReCaptcha as ReCaptchaService;
-use Override;
-
 use function array_key_exists;
 use function is_array;
+
 use function is_int;
 use function is_string;
+
+use Laminas\ReCaptcha\ReCaptcha as ReCaptchaService;
+use Override;
 
 /**
  * ReCaptcha adapter
@@ -241,7 +242,7 @@ class ReCaptcha extends AbstractAdapter
     #[Override]
     public function generate(): string
     {
-        return "";
+        return '';
     }
 
     /**
@@ -286,6 +287,6 @@ class ReCaptcha extends AbstractAdapter
     #[Override]
     public function getHelperName(): string
     {
-        return "captcha/recaptcha";
+        return 'captcha/recaptcha';
     }
 }

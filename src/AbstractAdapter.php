@@ -1,16 +1,24 @@
-<?php // phpcs:disable SlevomatCodingStandard.TypeHints.DeclareStrictTypes.DeclareStrictTypesMissing
+<?php
+
+declare(strict_types=1);
+// phpcs:disable SlevomatCodingStandard.TypeHints.DeclareStrictTypes.DeclareStrictTypesMissing
 
 namespace Laminas\Captcha;
 
-use Laminas\Validator\AbstractValidator;
-use Override;
-use Traversable;
-
 use function in_array;
 use function is_array;
+
+use Laminas\Validator\AbstractValidator;
+
 use function method_exists;
+
+use Override;
+
 use function property_exists;
 use function strtolower;
+
+use Traversable;
+
 use function ucfirst;
 
 /**

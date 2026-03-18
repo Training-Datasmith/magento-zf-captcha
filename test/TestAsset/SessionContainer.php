@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LaminasTest\Captcha\TestAsset;
 
 /**
@@ -8,7 +10,7 @@ namespace LaminasTest\Captcha\TestAsset;
 class SessionContainer
 {
     protected static $word;
-    
+
     protected $data = [];
 
     public function __isset($name)
@@ -19,7 +21,7 @@ class SessionContainer
 
         return false;
     }
-    
+
     public function __get($name)
     {
         if ($name === 'word') {
@@ -27,7 +29,7 @@ class SessionContainer
         }
         return $this->data[$name] ?? null;
     }
-    
+
     public function __set($name, $value)
     {
         if ($name === 'word') {
@@ -36,12 +38,12 @@ class SessionContainer
             $this->data[$name] = $value;
         }
     }
-    
+
     public function setExpirationHops($hops, $namespace = null): void
     {
         $this->data['setExpirationHops'] = $hops;
     }
-    
+
     public function setExpirationSeconds($seconds): void
     {
         $this->data['setExpirationSeconds'] = $seconds;

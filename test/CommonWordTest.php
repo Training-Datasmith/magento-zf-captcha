@@ -1,4 +1,7 @@
-<?php // phpcs:disable WebimpressCodingStandard.NamingConventions.AbstractClass.Prefix
+<?php
+
+declare(strict_types=1);
+// phpcs:disable WebimpressCodingStandard.NamingConventions.AbstractClass.Prefix
 
 namespace LaminasTest\Captcha;
 

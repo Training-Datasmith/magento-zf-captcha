@@ -4,13 +4,17 @@ declare(strict_types=1);
 
 namespace Laminas\Captcha;
 
-use Laminas\Session\Container;
-use Override;
-
 use function class_exists;
 use function count;
+
 use function is_array;
+
+use Laminas\Session\Container;
+
 use function md5;
+
+use Override;
+
 use function preg_match;
 use function random_bytes;
 use function random_int;
@@ -30,13 +34,13 @@ abstract class AbstractWord extends AbstractAdapter
      * @var array Character sets
      */
     /** @var list<string> */
-    public static $V  = ["a", "e", "i", "o", "u", "y"];
+    public static $V  = ['a', 'e', 'i', 'o', 'u', 'y'];
     /** @var list<string> */
-    public static $VN = ["a", "e", "i", "o", "u", "y", "2", "3", "4", "5", "6", "7", "8", "9"];
+    public static $VN = ['a', 'e', 'i', 'o', 'u', 'y', '2', '3', '4', '5', '6', '7', '8', '9'];
     /** @var list<string> */
-    public static $C  = ["b", "c", "d", "f", "g", "h", "j", "k", "m", "n", "p", "q", "r", "s", "t", "u", "v", "w", "x", "z"];
+    public static $C  = ['b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'm', 'n', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'z'];
     /** @var list<string> */
-    public static $CN = ["b", "c", "d", "f", "g", "h", "j", "k", "m", "n", "p", "q", "r", "s", "t", "u", "v", "w", "x", "z", "2", "3", "4", "5", "6", "7", "8", "9"];
+    public static $CN = ['b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'm', 'n', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'z', '2', '3', '4', '5', '6', '7', '8', '9'];
     /**#@-*/
     // @codingStandardsIgnoreEnd
 

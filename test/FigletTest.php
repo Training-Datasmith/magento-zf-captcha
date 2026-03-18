@@ -123,7 +123,7 @@ class FigletTest extends CommonWordTest
     public function testWrongWordNotValid(): void
     {
         $this->captcha->generate();
-        $input = ["id" => $this->captcha->getId(), "input" => "blah"];
+        $input = ['id' => $this->captcha->getId(), 'input' => 'blah'];
         $this->assertFalse($this->captcha->isValid($input));
     }
 
@@ -183,7 +183,7 @@ class FigletTest extends CommonWordTest
         $session = new SessionContainer('captcha');
         $this->captcha->setSession($session);
         $this->captcha->generate();
-        $input = ["id" => $this->captcha->getId(), "input" => $this->captcha->getWord()];
+        $input = ['id' => $this->captcha->getId(), 'input' => $this->captcha->getWord()];
         $this->assertTrue($this->captcha->isValid($input));
         $this->assertEquals($session->word, $this->captcha->getWord());
     }

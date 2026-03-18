@@ -4,22 +4,28 @@ declare(strict_types=1);
 
 namespace LaminasTest\Captcha;
 
-use DirectoryIterator;
-use Laminas\Captcha\Exception\ImageNotLoadableException;
-use Laminas\Captcha\Exception\NoFontProvidedException;
-use Laminas\Captcha\Image as ImageCaptcha;
-use Laminas\File\Transfer\Exception\RuntimeException;
-use LaminasTest\Captcha\TestAsset\SessionContainer;
-use Override;
-use PHPUnit\Framework\TestCase;
-
 use function clearstatcache;
+
+use DirectoryIterator;
+
 use function extension_loaded;
 use function file_put_contents;
 use function function_exists;
 use function getenv;
 use function is_dir;
+
+use Laminas\Captcha\Exception\ImageNotLoadableException;
+
+use Laminas\Captcha\Exception\NoFontProvidedException;
+use Laminas\Captcha\Image as ImageCaptcha;
+use Laminas\File\Transfer\Exception\RuntimeException;
+use LaminasTest\Captcha\TestAsset\SessionContainer;
+
 use function mkdir;
+
+use Override;
+use PHPUnit\Framework\TestCase;
+
 use function sleep;
 use function strlen;
 use function substr;
@@ -51,11 +57,11 @@ class ImageTest extends TestCase
         if (! extension_loaded('gd')) {
             $this->markTestSkipped('The GD extension is not available.');
         }
-        if (! function_exists("imagepng")) {
-            $this->markTestSkipped("Image CAPTCHA requires PNG support");
+        if (! function_exists('imagepng')) {
+            $this->markTestSkipped('Image CAPTCHA requires PNG support');
         }
-        if (! function_exists("imageftbbox")) {
-            $this->markTestSkipped("Image CAPTCHA requires FT fonts support");
+        if (! function_exists('imageftbbox')) {
+            $this->markTestSkipped('Image CAPTCHA requires FT fonts support');
         }
 
         if (isset($this->word)) {
@@ -105,20 +111,20 @@ class ImageTest extends TestCase
 
     public function testCaptchaSetSuffix(): void
     {
-        $this->captcha->setSuffix(".jpeg");
+        $this->captcha->setSuffix('.jpeg');
         $this->assertEquals('.jpeg', $this->captcha->getSuffix());
     }
 
     public function testCaptchaSetImgURL(): void
     {
-        $this->captcha->setImgUrl("/some/other/url/");
+        $this->captcha->setImgUrl('/some/other/url/');
         $this->assertEquals('/some/other/url/', $this->captcha->getImgUrl());
     }
 
     public function testCaptchaCreatesImage(): void
     {
         $this->captcha->generate();
-        $this->assertFileExists($this->testDir . "/" . $this->captcha->getId() . '.png');
+        $this->assertFileExists($this->testDir . '/' . $this->captcha->getId() . '.png');
     }
 
     public function testCaptchaSetExpiration(): void
@@ -131,7 +137,7 @@ class ImageTest extends TestCase
     public function testCaptchaImageCleanup(): void
     {
         $this->captcha->generate();
-        $filename = $this->testDir . "/" . $this->captcha->getId() . ".png";
+        $filename = $this->testDir . '/' . $this->captcha->getId() . '.png';
         $this->assertFileExists($filename);
         $this->captcha->setExpiration(1);
         $this->captcha->setGcFreq(1);
@@ -150,11 +156,11 @@ class ImageTest extends TestCase
             $this->markTestSkipped('Enable TESTS_LAMINAS_CAPTCHA_GC to run this test');
         }
         $this->captcha->generate();
-        $filename = $this->testDir . "/" . $this->captcha->getId() . ".png";
+        $filename = $this->testDir . '/' . $this->captcha->getId() . '.png';
         $this->assertFileExists($filename);
 
         //Create other cache file
-        $otherFile = $this->testDir . "/laminas10006.cache";
+        $otherFile = $this->testDir . '/laminas10006.cache';
         file_put_contents($otherFile, '');
         $this->assertFileExists($otherFile);
         $this->captcha->setExpiration(1);
@@ -219,7 +225,7 @@ class ImageTest extends TestCase
     public function testWordValidates(): void
     {
         $this->captcha->generate();
-        $input = ["id" => $this->captcha->getId(), "input" => $this->captcha->getWord()];
+        $input = ['id' => $this->captcha->getId(), 'input' => $this->captcha->getWord()];
         $this->assertTrue($this->captcha->isValid($input));
     }
 
@@ -227,14 +233,14 @@ class ImageTest extends TestCase
     {
         $this->captcha->generate();
         $this->assertFalse($this->captcha->isValid([]));
-        $input = ["input" => "blah"];
+        $input = ['input' => 'blah'];
         $this->assertFalse($this->captcha->isValid($input));
     }
 
     public function testDoubleSubmitNotValidates(): void
     {
         $this->captcha->generate();
-        $input = ["id" => $this->captcha->getId(), "input" => $this->captcha->getWord()];
+        $input = ['id' => $this->captcha->getId(), 'input' => $this->captcha->getWord()];
         $this->assertTrue($this->captcha->isValid($input));
         $this->assertFalse($this->captcha->isValid($input));
     }
@@ -243,16 +249,16 @@ class ImageTest extends TestCase
     {
         $this->captcha->generate();
         $id    = $this->captcha->getId();
-        $input = ["id" => substr($id, 0, strlen($id) - 1) . "+", "input" => $this->captcha->getWord()];
+        $input = ['id' => substr($id, 0, strlen($id) - 1) . '+', 'input' => $this->captcha->getWord()];
         $this->assertFalse($this->captcha->isValid($input));
-        $input = ["id" => substr($id, 0, strlen($id) - 1) . "-", "input" => $this->captcha->getWord()];
+        $input = ['id' => substr($id, 0, strlen($id) - 1) . '-', 'input' => $this->captcha->getWord()];
         $this->assertFalse($this->captcha->isValid($input));
     }
 
     public function testWrongWordNotValid(): void
     {
         $this->captcha->generate();
-        $input = ["id" => $this->captcha->getId(), "input" => "blah"];
+        $input = ['id' => $this->captcha->getId(), 'input' => 'blah'];
         $this->assertFalse($this->captcha->isValid($input));
     }
 

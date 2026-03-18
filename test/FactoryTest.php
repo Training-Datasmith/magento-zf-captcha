@@ -5,21 +5,26 @@ declare(strict_types=1);
 namespace LaminasTest\Captcha;
 
 use DirectoryIterator;
-use Laminas\Captcha;
-use Laminas\Captcha\Dumb;
-use Laminas\Captcha\Figlet;
-use Laminas\Captcha\Image;
-use Laminas\Captcha\ReCaptcha;
-use LaminasTest\Captcha\TestAsset\MockCaptcha;
-use LaminasTest\Captcha\TestAsset\SessionContainer;
-use Override;
-use PHPUnit\Framework\TestCase;
 
 use function extension_loaded;
 use function function_exists;
 use function getenv;
 use function is_dir;
+
+use Laminas\Captcha;
+use Laminas\Captcha\Dumb;
+use Laminas\Captcha\Figlet;
+use Laminas\Captcha\Image;
+use Laminas\Captcha\ReCaptcha;
+
+use LaminasTest\Captcha\TestAsset\MockCaptcha;
+use LaminasTest\Captcha\TestAsset\SessionContainer;
+
 use function mkdir;
+
+use Override;
+use PHPUnit\Framework\TestCase;
+
 use function sys_get_temp_dir;
 use function unlink;
 
@@ -69,11 +74,11 @@ class FactoryTest extends TestCase
         if (! extension_loaded('gd')) {
             $this->markTestSkipped('The GD extension is not available.');
         }
-        if (! function_exists("imagepng")) {
-            $this->markTestSkipped("Image CAPTCHA requires PNG support");
+        if (! function_exists('imagepng')) {
+            $this->markTestSkipped('Image CAPTCHA requires PNG support');
         }
-        if (! function_exists("imageftbbox")) {
-            $this->markTestSkipped("Image CAPTCHA requires FT fonts support");
+        if (! function_exists('imageftbbox')) {
+            $this->markTestSkipped('Image CAPTCHA requires FT fonts support');
         }
 
         $this->testDir = $this->getTmpDir() . '/Laminas_test_images';
