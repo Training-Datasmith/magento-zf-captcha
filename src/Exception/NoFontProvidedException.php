@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Laminas\Captcha\Exception;
 
 /**
@@ -9,6 +8,6 @@ namespace Laminas\Captcha\Exception;
  *
  * @final This class should not be extended
  */
-class NoFontProvidedException extends InvalidArgumentException
+class No_Font_Provided_Exception extends InvalidArgumentException
 {
 }

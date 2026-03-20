@@ -1,11 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Laminas\Captcha;
 
 use Override;
-
 /**
  * Example dumb word-based captcha
  *
@@ -15,7 +13,7 @@ use Override;
  *     entered to be the strrev of the word stored.
  * @final This class should not be extended
  */
-class Dumb extends AbstractWord
+class Dumb extends Abstract_Word
 {
     /**
      * CAPTCHA label
@@ -23,32 +21,29 @@ class Dumb extends AbstractWord
      * @var string
      */
     protected $label = 'Please type this word backwards';
-
     /**
      * Set the label for the CAPTCHA
      *
      * @param string $label
      */
-    public function setLabel($label): void
+    public function set_label($label): void
     {
         $this->label = $label;
     }
-
     /**
      * Retrieve the label for the CAPTCHA
      *
      * @return string
      */
-    public function getLabel()
+    public function get_label()
     {
         return $this->label;
     }
-
     /**
      * Retrieve optional view helper name to use when rendering this captcha
      */
     #[Override]
-    public function getHelperName(): string
+    public function get_helper_name(): string
     {
         return 'captcha/dumb';
     }

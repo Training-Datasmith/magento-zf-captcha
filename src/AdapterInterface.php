@@ -1,17 +1,15 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Laminas\Captcha;
 
-use Laminas\Validator\ValidatorInterface;
-
+use Laminas\Validator\Validator_Interface;
 /**
  * Generic Captcha adapter interface
  *
  * Each specific captcha implementation should implement this interface
  */
-interface AdapterInterface extends ValidatorInterface
+interface Adapter_Interface extends Validator_Interface
 {
     /**
      * Generate a new captcha
@@ -19,26 +17,23 @@ interface AdapterInterface extends ValidatorInterface
      * @return string new captcha ID
      */
     public function generate();
-
     /**
      * Set captcha name
      *
      * @param  string $name
      * @return AdapterInterface
      */
-    public function setName($name);
-
+    public function set_name($name);
     /**
      * Get captcha name
      *
      * @return string
      */
-    public function getName();
-
+    public function get_name();
     /**
      * Get helper name to use when rendering this captcha type
      *
      * @return string
      */
-    public function getHelperName();
+    public function get_helper_name();
 }

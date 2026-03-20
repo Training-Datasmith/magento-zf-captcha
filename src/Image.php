@@ -1,15 +1,12 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
 // phpcs:disable WebimpressCodingStandard.NamingConventions.ValidVariableName.final NotCamelCaps
-
 namespace Laminas\Captcha;
 
-use DirectoryIterator;
-
+use Directory_Iterator;
 use function extension_loaded;
 use function file_exists;
-
 use function floor;
 use function function_exists;
 use function imagecolorallocate;
@@ -25,20 +22,15 @@ use function imagepng;
 use function imagesetpixel;
 use function imagesx;
 use function imagesy;
-
-use Laminas\Stdlib\ErrorHandler;
-
+use Laminas\Stdlib\Error_Handler;
 use function mt_rand;
-
 use Override;
-
 use function rtrim;
 use function sin;
 use function strlen;
 use function substr;
 use function time;
 use function unlink;
-
 /**
  * Image-based captcha element
  *
@@ -46,102 +38,89 @@ use function unlink;
  *
  * @final This class should not be extended
  */
-class Image extends AbstractWord
+class Image extends Abstract_Word
 {
     /**
      * Directory for generated images
      *
      * @var string
      */
-    protected $imgDir = 'public/images/captcha/';
-
+    protected $img_dir = 'public/images/captcha/';
     /**
      * URL for accessing images
      *
      * @var string
      */
-    protected $imgUrl = '/images/captcha/';
-
+    protected $img_url = '/images/captcha/';
     /**
      * Image's alt tag content
      *
      * @var string
      */
-    protected $imgAlt = '';
-
+    protected $img_alt = '';
     /**
      * Image suffix (including dot)
      *
      * @var string
      */
     protected $suffix = '.png';
-
     /**
      * Image width
      *
      * @var int
      */
     protected $width = 200;
-
     /**
      * Image height
      *
      * @var int
      */
     protected $height = 50;
-
     /**
      * Font size
      *
      * @var int
      */
     protected $fsize = 24;
-
     /**
      * Image font file
      *
      * @var string
      */
     protected $font;
-
     /**
      * Image to use as starting point
      * Default is blank image. If provided, should be PNG image.
      *
      * @var string
      */
-    protected $startImage;
-
+    protected $start_image;
     /**
      * How frequently to execute garbage collection
      *
      * @var int
      */
-    protected $gcFreq = 10;
-
+    protected $gc_freq = 10;
     /**
      * How long to keep generated images
      *
      * @var int
      */
     protected $expiration = 600;
-
     /**
      * Number of noise dots on image
      * Used twice - before and after transform
      *
      * @var int
      */
-    protected $dotNoiseLevel = 100;
-
+    protected $dot_noise_level = 100;
     /**
      * Number of noise lines on image
      * Used twice - before and after transform
      *
      * @var int
      */
-    protected $lineNoiseLevel = 5;
-
+    protected $line_noise_level = 5;
     /**
      * Constructor
      *
@@ -149,318 +128,288 @@ class Image extends AbstractWord
      */
     public function __construct()
     {
-        if (! extension_loaded('gd')) {
-            throw new Exception\ExtensionNotLoadedException('Image CAPTCHA requires GD extension');
+        if (!extension_loaded('gd')) {
+            throw new Exception\Extension_Not_Loaded_Exception('Image CAPTCHA requires GD extension');
         }
-        if (! function_exists('imagepng')) {
-            throw new Exception\ExtensionNotLoadedException('Image CAPTCHA requires PNG support');
+        if (!function_exists('imagepng')) {
+            throw new Exception\Extension_Not_Loaded_Exception('Image CAPTCHA requires PNG support');
         }
-        if (! function_exists('imageftbbox')) {
-            throw new Exception\ExtensionNotLoadedException('Image CAPTCHA requires FT fonts support');
+        if (!function_exists('imageftbbox')) {
+            throw new Exception\Extension_Not_Loaded_Exception('Image CAPTCHA requires FT fonts support');
         }
     }
-
     /**
      * @return string
      */
-    public function getImgAlt()
+    public function get_img_alt()
     {
-        return $this->imgAlt;
+        return $this->img_alt;
     }
-
     /**
      * @return string
      */
-    public function getStartImage()
+    public function get_start_image()
     {
-        return $this->startImage;
+        return $this->start_image;
     }
-
     /**
      * @return int
      */
-    public function getDotNoiseLevel()
+    public function get_dot_noise_level()
     {
-        return $this->dotNoiseLevel;
+        return $this->dot_noise_level;
     }
-
     /**
      * @return int
      */
-    public function getLineNoiseLevel()
+    public function get_line_noise_level()
     {
-        return $this->lineNoiseLevel;
+        return $this->line_noise_level;
     }
-
     /**
      * Get captcha expiration
      *
      * @return int
      */
-    public function getExpiration()
+    public function get_expiration()
     {
         return $this->expiration;
     }
-
     /**
      * Get garbage collection frequency
      *
      * @return int
      */
-    public function getGcFreq()
+    public function get_gc_freq()
     {
-        return $this->gcFreq;
+        return $this->gc_freq;
     }
-
     /**
      * Get font to use when generating captcha
      *
      * @return string
      */
-    public function getFont()
+    public function get_font()
     {
         return $this->font;
     }
-
     /**
      * Get font size
      *
      * @return int
      */
-    public function getFontSize()
+    public function get_font_size()
     {
         return $this->fsize;
     }
-
     /**
      * Get captcha image height
      *
      * @return int
      */
-    public function getHeight()
+    public function get_height()
     {
         return $this->height;
     }
-
     /**
      * Get captcha image directory
      *
      * @return string
      */
-    public function getImgDir()
+    public function get_img_dir()
     {
-        return $this->imgDir;
+        return $this->img_dir;
     }
-
     /**
      * Get captcha image base URL
      *
      * @return string
      */
-    public function getImgUrl()
+    public function get_img_url()
     {
-        return $this->imgUrl;
+        return $this->img_url;
     }
-
     /**
      * Get captcha image file suffix
      *
      * @return string
      */
-    public function getSuffix()
+    public function get_suffix()
     {
         return $this->suffix;
     }
-
     /**
      * Get captcha image width
      *
      * @return int
      */
-    public function getWidth()
+    public function get_width()
     {
         return $this->width;
     }
-
     /**
      * @param string $startImage
      * @return Image Provides a fluent interface
      */
-    public function setStartImage($startImage)
+    public function set_start_image($start_image)
     {
-        $this->startImage = $startImage;
+        $this->start_image = $start_image;
         return $this;
     }
-
     /**
      * @param int $dotNoiseLevel
      * @return Image Provides a fluent interface
      */
-    public function setDotNoiseLevel($dotNoiseLevel)
+    public function set_dot_noise_level($dot_noise_level)
     {
-        $this->dotNoiseLevel = $dotNoiseLevel;
+        $this->dot_noise_level = $dot_noise_level;
         return $this;
     }
-
     /**
      * @param int $lineNoiseLevel
      * @return Image Provides a fluent interface
      */
-    public function setLineNoiseLevel($lineNoiseLevel)
+    public function set_line_noise_level($line_noise_level)
     {
-        $this->lineNoiseLevel = $lineNoiseLevel;
+        $this->line_noise_level = $line_noise_level;
         return $this;
     }
-
     /**
      * Set captcha expiration
      *
      * @param  int $expiration
      * @return Image Provides a fluent interface
      */
-    public function setExpiration($expiration)
+    public function set_expiration($expiration)
     {
         $this->expiration = $expiration;
         return $this;
     }
-
     /**
      * Set garbage collection frequency
      *
      * @param  int $gcFreq
      * @return Image Provides a fluent interface
      */
-    public function setGcFreq($gcFreq)
+    public function set_gc_freq($gc_freq)
     {
-        $this->gcFreq = $gcFreq;
+        $this->gc_freq = $gc_freq;
         return $this;
     }
-
     /**
      * Set captcha font
      *
      * @param  string $font
      * @return Image Provides a fluent interface
      */
-    public function setFont($font)
+    public function set_font($font)
     {
         $this->font = $font;
         return $this;
     }
-
     /**
      * Set captcha font size
      *
      * @param  int $fsize
      * @return Image Provides a fluent interface
      */
-    public function setFontSize($fsize)
+    public function set_font_size($fsize)
     {
         $this->fsize = $fsize;
         return $this;
     }
-
     /**
      * Set captcha image height
      *
      * @param  int $height
      * @return Image Provides a fluent interface
      */
-    public function setHeight($height)
+    public function set_height($height)
     {
         $this->height = $height;
         return $this;
     }
-
     /**
      * Set captcha image storage directory
      *
      * @param  string $imgDir
      * @return Image Provides a fluent interface
      */
-    public function setImgDir($imgDir)
+    public function set_img_dir($img_dir)
     {
-        $this->imgDir = rtrim($imgDir, '/\\') . '/';
+        $this->img_dir = rtrim($img_dir, '/\\') . '/';
         return $this;
     }
-
     /**
      * Set captcha image base URL
      *
      * @param  string $imgUrl
      * @return Image Provides a fluent interface
      */
-    public function setImgUrl($imgUrl)
+    public function set_img_url($img_url)
     {
-        $this->imgUrl = rtrim($imgUrl, '/\\') . '/';
+        $this->img_url = rtrim($img_url, '/\\') . '/';
         return $this;
     }
-
     /**
      * @param string $imgAlt
      * @return Image Provides a fluent interface
      */
-    public function setImgAlt($imgAlt)
+    public function set_img_alt($img_alt)
     {
-        $this->imgAlt = $imgAlt;
+        $this->img_alt = $img_alt;
         return $this;
     }
-
     /**
      * Set captcha image filename suffix
      *
      * @param  string $suffix
      * @return Image Provides a fluent interface
      */
-    public function setSuffix($suffix)
+    public function set_suffix($suffix)
     {
         $this->suffix = $suffix;
         return $this;
     }
-
     /**
      * Set captcha image width
      *
      * @param  int $width
      * @return Image Provides a fluent interface
      */
-    public function setWidth($width)
+    public function set_width($width)
     {
         $this->width = $width;
         return $this;
     }
-
     /**
      * Generate random frequency
      *
      * @return float
      */
-    protected function randomFreq()
+    protected function random_freq()
     {
-        return mt_rand(700000, 1_000_000) / 15_000_000;
+        return mt_rand(700000, 1000000) / 15000000;
     }
-
     /**
      * Generate random phase
      *
      * @return float
      */
-    protected function randomPhase()
+    protected function random_phase()
     {
         // random phase from 0 to pi
-        return mt_rand(0, 3_141_592) / 1_000_000;
+        return mt_rand(0, 3141592) / 1000000;
     }
-
     /**
      * Generate random character size
      *
      * @return float|int
      */
-    protected function randomSize()
+    protected function random_size()
     {
         return mt_rand(300, 700) / 100;
     }
-
     /**
      * Generate captcha
      *
@@ -469,23 +418,19 @@ class Image extends AbstractWord
     #[Override]
     public function generate()
     {
-        $id    = parent::generate();
+        $id = parent::generate();
         $tries = 5;
-
         // If there's already such file, try creating a new ID
-        while ($tries-- && file_exists($this->getImgDir() . $id . $this->getSuffix())) {
-            $id = $this->generateRandomId();
-            $this->setId($id);
+        while ($tries-- && file_exists($this->get_img_dir() . $id . $this->get_suffix())) {
+            $id = $this->generate_random_id();
+            $this->set_id($id);
         }
-        $this->generateImage($id, $this->getWord());
-
-        if (mt_rand(1, $this->getGcFreq()) === 1) {
+        $this->generate_image($id, $this->get_word());
+        if (mt_rand(1, $this->get_gc_freq()) === 1) {
             $this->gc();
         }
-
         return $id;
     }
-
     /**
      * Generate image captcha
      *
@@ -498,75 +443,60 @@ class Image extends AbstractWord
      * @throws Exception\ImageNotLoadableException If start image cannot be loaded.
      * @return void
      */
-    protected function generateImage($id, $word)
+    protected function generate_image($id, $word)
     {
-        $font = $this->getFont();
-
+        $font = $this->get_font();
         if (empty($font)) {
-            throw new Exception\NoFontProvidedException('Image CAPTCHA requires font');
+            throw new Exception\No_Font_Provided_Exception('Image CAPTCHA requires font');
         }
-
-        $w     = $this->getWidth();
-        $h     = $this->getHeight();
-        $fsize = $this->getFontSize();
-
-        $imgFile = $this->getImgDir() . $id . $this->getSuffix();
-
-        if (empty($this->startImage)) {
+        $w = $this->get_width();
+        $h = $this->get_height();
+        $fsize = $this->get_font_size();
+        $img_file = $this->get_img_dir() . $id . $this->get_suffix();
+        if (empty($this->start_image)) {
             $img = imagecreatetruecolor($w, $h);
         } else {
             // Potential error is change to exception
-            ErrorHandler::start();
-            $img   = imagecreatefrompng($this->startImage);
-            $error = ErrorHandler::stop();
-            if (! $img || $error) {
-                throw new Exception\ImageNotLoadableException(
-                    "Can not load start image '{$this->startImage}'",
-                    0,
-                    $error
-                );
+            Error_Handler::start();
+            $img = imagecreatefrompng($this->start_image);
+            $error = Error_Handler::stop();
+            if (!$img || $error) {
+                throw new Exception\Image_Not_Loadable_Exception("Can not load start image '{$this->start_image}'", 0, $error);
             }
             $w = imagesx($img);
             $h = imagesy($img);
         }
-
-        $textColor = imagecolorallocate($img, 0, 0, 0);
-        $bgColor   = imagecolorallocate($img, 255, 255, 255);
-        imagefilledrectangle($img, 0, 0, $w - 1, $h - 1, $bgColor);
+        $text_color = imagecolorallocate($img, 0, 0, 0);
+        $bg_color = imagecolorallocate($img, 255, 255, 255);
+        imagefilledrectangle($img, 0, 0, $w - 1, $h - 1, $bg_color);
         $textbox = imageftbbox($fsize, 0, $font, $word);
-        $x       = ($w - ($textbox[2] - $textbox[0])) / 2;
-        $y       = ($h - ($textbox[7] - $textbox[1])) / 2;
-        $x       = (int) $x;
-        $y       = (int) $y;
-        imagefttext($img, $fsize, 0, $x, $y, $textColor, $font, $word);
-
+        $x = ($w - ($textbox[2] - $textbox[0])) / 2;
+        $y = ($h - ($textbox[7] - $textbox[1])) / 2;
+        $x = (int) $x;
+        $y = (int) $y;
+        imagefttext($img, $fsize, 0, $x, $y, $text_color, $font, $word);
         // generate noise
-        for ($i = 0; $i < $this->dotNoiseLevel; $i++) {
-            imagefilledellipse($img, mt_rand(0, $w), mt_rand(0, $h), 2, 2, $textColor);
+        for ($i = 0; $i < $this->dot_noise_level; $i++) {
+            imagefilledellipse($img, mt_rand(0, $w), mt_rand(0, $h), 2, 2, $text_color);
         }
-        for ($i = 0; $i < $this->lineNoiseLevel; $i++) {
-            imageline($img, mt_rand(0, $w), mt_rand(0, $h), mt_rand(0, $w), mt_rand(0, $h), $textColor);
+        for ($i = 0; $i < $this->line_noise_level; $i++) {
+            imageline($img, mt_rand(0, $w), mt_rand(0, $h), mt_rand(0, $w), mt_rand(0, $h), $text_color);
         }
-
         // transformed image
-        $img2    = imagecreatetruecolor($w, $h);
-        $bgColor = imagecolorallocate($img2, 255, 255, 255);
-        imagefilledrectangle($img2, 0, 0, $w - 1, $h - 1, $bgColor);
-
+        $img2 = imagecreatetruecolor($w, $h);
+        $bg_color = imagecolorallocate($img2, 255, 255, 255);
+        imagefilledrectangle($img2, 0, 0, $w - 1, $h - 1, $bg_color);
         // apply wave transforms
-        $freq1 = $this->randomFreq();
-        $freq2 = $this->randomFreq();
-        $freq3 = $this->randomFreq();
-        $freq4 = $this->randomFreq();
-
-        $ph1 = $this->randomPhase();
-        $ph2 = $this->randomPhase();
-        $ph3 = $this->randomPhase();
-        $ph4 = $this->randomPhase();
-
-        $szx = $this->randomSize();
-        $szy = $this->randomSize();
-
+        $freq1 = $this->random_freq();
+        $freq2 = $this->random_freq();
+        $freq3 = $this->random_freq();
+        $freq4 = $this->random_freq();
+        $ph1 = $this->random_phase();
+        $ph2 = $this->random_phase();
+        $ph3 = $this->random_phase();
+        $ph4 = $this->random_phase();
+        $szx = $this->random_size();
+        $szy = $this->random_size();
         for ($x = 0; $x < $w; $x++) {
             for ($y = 0; $y < $h; $y++) {
                 $sx = $x + (sin($x * $freq1 + $ph1) + sin($y * $freq3 + $ph3)) * $szx;
@@ -585,52 +515,37 @@ class Image extends AbstractWord
                 if ($sy >= $h - 1) {
                     continue;
                 }
-                $color   = (imagecolorat($img, $sx, $sy) >> 16) & 0xFF;
-                $colorX  = (imagecolorat($img, $sx + 1, $sy) >> 16) & 0xFF;
-                $colorY  = (imagecolorat($img, $sx, $sy + 1) >> 16) & 0xFF;
-                $colorXy = (imagecolorat($img, $sx + 1, $sy + 1) >> 16) & 0xFF;
-                if ($color === 255 && $colorX === 255 && $colorY === 255 && $colorXy === 255) {
+                $color = imagecolorat($img, $sx, $sy) >> 16 & 0xff;
+                $color_x = imagecolorat($img, $sx + 1, $sy) >> 16 & 0xff;
+                $color_y = imagecolorat($img, $sx, $sy + 1) >> 16 & 0xff;
+                $color_xy = imagecolorat($img, $sx + 1, $sy + 1) >> 16 & 0xff;
+                if ($color === 255 && $color_x === 255 && $color_y === 255 && $color_xy === 255) {
                     // ignore background
                     continue;
                 }
-
-                if ($color === 0 && $colorX === 0 && $colorY === 0 && $colorXy === 0) {
+                if ($color === 0 && $color_x === 0 && $color_y === 0 && $color_xy === 0) {
                     // transfer inside of the image as-is
                     $newcolor = 0;
                 } else {
                     // do antialiasing for border items
-                    $fracX  = $sx - floor($sx);
-                    $fracY  = $sy - floor($sy);
-                    $fracX1 = 1 - $fracX;
-                    $fracY1 = 1 - $fracY;
-
-                    $newcolor = $color * $fracX1 * $fracY1
-                              + $colorX * $fracX * $fracY1
-                              + $colorY * $fracX1 * $fracY
-                              + $colorXy * $fracX * $fracY;
+                    $frac_x = $sx - floor($sx);
+                    $frac_y = $sy - floor($sy);
+                    $frac_x1 = 1 - $frac_x;
+                    $frac_y1 = 1 - $frac_y;
+                    $newcolor = $color * $frac_x1 * $frac_y1 + $color_x * $frac_x * $frac_y1 + $color_y * $frac_x1 * $frac_y + $color_xy * $frac_x * $frac_y;
                 }
-
-                imagesetpixel($img2, $x, $y, imagecolorallocate(
-                    $img2,
-                    (int) $newcolor,
-                    (int) $newcolor,
-                    (int) $newcolor
-                ));
+                imagesetpixel($img2, $x, $y, imagecolorallocate($img2, (int) $newcolor, (int) $newcolor, (int) $newcolor));
             }
         }
-
         // generate noise
-        for ($i = 0; $i < $this->dotNoiseLevel; $i++) {
-            imagefilledellipse($img2, mt_rand(0, $w), mt_rand(0, $h), 2, 2, $textColor);
+        for ($i = 0; $i < $this->dot_noise_level; $i++) {
+            imagefilledellipse($img2, mt_rand(0, $w), mt_rand(0, $h), 2, 2, $text_color);
         }
-
-        for ($i = 0; $i < $this->lineNoiseLevel; $i++) {
-            imageline($img2, mt_rand(0, $w), mt_rand(0, $h), mt_rand(0, $w), mt_rand(0, $h), $textColor);
+        for ($i = 0; $i < $this->line_noise_level; $i++) {
+            imageline($img2, mt_rand(0, $w), mt_rand(0, $h), mt_rand(0, $w), mt_rand(0, $h), $text_color);
         }
-
-        imagepng($img2, $imgFile);
+        imagepng($img2, $img_file);
     }
-
     /**
      * Remove old files from image directory
      *
@@ -638,42 +553,40 @@ class Image extends AbstractWord
      */
     protected function gc()
     {
-        $expire = time() - $this->getExpiration();
-        $imgdir = $this->getImgDir();
-        if (! $imgdir || strlen($imgdir) < 2) {
+        $expire = time() - $this->get_expiration();
+        $imgdir = $this->get_img_dir();
+        if (!$imgdir || strlen($imgdir) < 2) {
             // safety guard
             return;
         }
-
-        $suffixLength = strlen($this->suffix);
-        foreach (new DirectoryIterator($imgdir) as $file) {
-            if ($file->isDot()) {
+        $suffix_length = strlen($this->suffix);
+        foreach (new Directory_Iterator($imgdir) as $file) {
+            if ($file->is_dot()) {
                 continue;
             }
-            if ($file->isDir()) {
+            if ($file->is_dir()) {
                 continue;
             }
-            if (!file_exists($file->getPathname())) {
+            if (!file_exists($file->get_pathname())) {
                 continue;
             }
-            if (!($file->getMTime() < $expire)) {
+            if (!($file->get_m_time() < $expire)) {
                 continue;
             }
             // only deletes files ending with $this->suffix
-            if (substr($file->getFilename(), -$suffixLength) !== $this->suffix) {
+            if (substr($file->get_filename(), -$suffix_length) !== $this->suffix) {
                 continue;
             }
-            ErrorHandler::start();
-            unlink($file->getPathname());
-            ErrorHandler::stop();
+            Error_Handler::start();
+            unlink($file->get_pathname());
+            Error_Handler::stop();
         }
     }
-
     /**
      * Get helper name used to render captcha
      */
     #[Override]
-    public function getHelperName(): string
+    public function get_helper_name(): string
     {
         return 'captcha/image';
     }
