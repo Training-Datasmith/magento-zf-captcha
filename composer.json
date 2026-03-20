@@ -24,7 +24,7 @@
             "dealerdirect/phpcodesniffer-composer-installer": true
         }
     },
-    "extra": {},
+    "extra": [],
     "require": {
         "php": "~8.2.0 || ~8.3.0 || ~8.4.0 || ~8.5.0",
         "laminas/laminas-recaptcha": "^3.4.0",
@@ -41,7 +41,7 @@
         "vimeo/psalm": "^6.13"
     },
     "replace": {
-      "laminas/laminas-captcha": "^2.19"
+        "laminas/laminas-captcha": "^2.19"
     },
     "suggest": {
         "laminas/laminas-i18n-resources": "Translations of captcha messages"
@@ -53,7 +53,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "LaminasTest\\Captcha\\": "test/"
+            "Laminas_Test\\Captcha\\": "test/"
         }
     },
     "scripts": {
